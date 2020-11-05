@@ -1,25 +1,38 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
-const Stats = (props) => {
-  if (props.all > 0)
-    return (
-      <>
-        <h2>Statistics</h2>
-        <p>Good: {props.good}</p>
-        <p>Neutral: {props.neutral}</p>
-        <p>Bad: {props.bad}</p>
-        <p>All: {props.all}</p>
-        <p>Average: {props.avg / props.all}</p>
-        <p>Positive: {(props.good / props.all) * 100}%</p>
-      </>
-    );
-
+const Button = (props) => {
   return (
     <>
-      <h2>Awaiting Feedback...</h2>
+      <button onClick={props.handleClick}>{props.text}</button>
     </>
   );
+};
+
+const StatsHeader = (props) => {
+  const statsExist = props.value;
+  // if (props.value > 0)
+  return (
+    <>{statsExist ? <h2>Statistics</h2> : <h2>Awaiting Feedback...</h2>}</>
+  );
+  // return (
+  //   <>
+  //     <h2>Awaiting Feedback...</h2>
+  //   </>
+  // );
+};
+
+const Stats = (props) => {
+  if (props.val2 > 0)
+    return (
+      <>
+        <p>
+          {props.text} {props.value}
+          {props.perc}
+        </p>
+      </>
+    );
+  return <></>;
 };
 
 const App = () => {
@@ -51,10 +64,22 @@ const App = () => {
   return (
     <div>
       <h1>Give Feedback</h1>
-      <button onClick={handleGoodClick}>good</button>
-      <button onClick={handleNeutralClick}>neutral</button>
-      <button onClick={handleBadClick}>bad</button>
-      <Stats good={good} bad={bad} neutral={neutral} all={all} avg={avg} />
+
+      <Button handleClick={handleGoodClick} text="good" />
+      <Button handleClick={handleNeutralClick} text="neutral" />
+      <Button handleClick={handleBadClick} text="bad" />
+      <StatsHeader value={all} />
+      <Stats value={good} text="Good: " val2={all} />
+      <Stats value={neutral} text="Neutral: " val2={all} />
+      <Stats value={bad} text="Bad: " val2={all} />
+      <Stats value={all} text="All: " val2={all} />
+      <Stats value={avg / all} text="Average: " val2={all} />
+      <Stats
+        value={(good / all) * 100}
+        perc={"%"}
+        text="Positive: "
+        val2={all}
+      />
     </div>
   );
 };
