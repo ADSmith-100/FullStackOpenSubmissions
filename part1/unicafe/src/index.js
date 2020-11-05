@@ -26,10 +26,15 @@ const Stats = (props) => {
   if (props.val2 > 0)
     return (
       <>
-        <p>
-          {props.text} {props.value}
-          {props.perc}
-        </p>
+        <tbody>
+          <tr>
+            <td>{props.text}</td>
+            <td>
+              {props.value}
+              {props.perc}
+            </td>
+          </tr>
+        </tbody>
       </>
     );
   return <></>;
@@ -69,17 +74,19 @@ const App = () => {
       <Button handleClick={handleNeutralClick} text="neutral" />
       <Button handleClick={handleBadClick} text="bad" />
       <StatsHeader value={all} />
-      <Stats value={good} text="Good: " val2={all} />
-      <Stats value={neutral} text="Neutral: " val2={all} />
-      <Stats value={bad} text="Bad: " val2={all} />
-      <Stats value={all} text="All: " val2={all} />
-      <Stats value={avg / all} text="Average: " val2={all} />
-      <Stats
-        value={(good / all) * 100}
-        perc={"%"}
-        text="Positive: "
-        val2={all}
-      />
+      <table>
+        <Stats value={good} text="Good: " val2={all} />
+        <Stats value={neutral} text="Neutral: " val2={all} />
+        <Stats value={bad} text="Bad: " val2={all} />
+        <Stats value={all} text="All: " val2={all} />
+        <Stats value={avg / all} text="Average: " val2={all} />
+        <Stats
+          value={(good / all) * 100}
+          perc={"%"}
+          text="Positive: "
+          val2={all}
+        />
+      </table>
     </div>
   );
 };
