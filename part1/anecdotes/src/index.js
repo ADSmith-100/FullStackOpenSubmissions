@@ -15,6 +15,10 @@ const App = (props) => {
     setPoints(runningVote);
   };
 
+  let mostPoints = Object.keys(points).reduce((a, b) =>
+    points[a] > points[b] ? a : b
+  );
+
   return (
     <div>
       <h1>Anecdote of the Day:</h1>
@@ -24,6 +28,11 @@ const App = (props) => {
       <p>has {points[selected]} votes</p>
       <button onClick={handleVote}>Vote</button>
       <button onClick={handleClick}>Next Anecdote!</button>
+      <h2>Anecdote with the most votes:</h2>
+      <p>
+        [{parseInt(mostPoints) + 1}] {props.anecdotes[mostPoints]}
+      </p>
+      <p>has {points[mostPoints]} votes</p>
     </div>
   );
 };
