@@ -1,11 +1,19 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
+const Button = (props) => {
+  return (
+    <>
+      <button onClick={props.handleClick}>{props.text}</button>
+    </>
+  );
+};
+
 const App = (props) => {
   const [selected, setSelected] = useState(0);
   const [points, setPoints] = useState({ 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
 
-  const handleClick = () => {
+  const handleNext = () => {
     setSelected(Math.floor(Math.random() * Math.floor(anecdotes.length)));
   };
 
@@ -26,8 +34,8 @@ const App = (props) => {
         [{selected + 1}] {props.anecdotes[selected]}
       </p>
       <p>has {points[selected]} votes</p>
-      <button onClick={handleVote}>Vote</button>
-      <button onClick={handleClick}>Next Anecdote!</button>
+      <Button handleClick={handleVote} text="Vote" />
+      <Button handleClick={handleNext} text="Next Anecdote!" />
       <h2>Anecdote with the most votes:</h2>
       <p>
         [{parseInt(mostPoints) + 1}] {props.anecdotes[mostPoints]}
