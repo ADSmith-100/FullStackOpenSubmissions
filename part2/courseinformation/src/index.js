@@ -34,7 +34,7 @@ const Content = ({ course }) => {
 const Course = (props) => {
   return (
     <>
-      <Header course={props.course} part={props.part} />
+      <Header course={props.course} />
       <Content course={props.course} part={props.part} />
     </>
   );
