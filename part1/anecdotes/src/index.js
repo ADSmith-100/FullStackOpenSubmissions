@@ -1,6 +1,30 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
+const AMostV = (props) => {
+  return (
+    <>
+      <h2>Anecdote with the most votes:</h2>
+      <p>
+        [{parseInt(props.mostPoints) + 1}] {props.anecdotes[props.mostPoints]}
+      </p>
+      <p>has {props.points[props.mostPoints]} votes</p>
+    </>
+  );
+};
+
+const AOfDay = (props) => {
+  return (
+    <>
+      <h1>Anecdote of the Day:</h1>
+      <p>
+        [{props.selected + 1}] {props.anecdotes[props.selected]}
+      </p>
+      <p>has {props.points[props.selected]} votes</p>
+    </>
+  );
+};
+
 const Button = (props) => {
   return (
     <>
@@ -29,18 +53,10 @@ const App = (props) => {
 
   return (
     <div>
-      <h1>Anecdote of the Day:</h1>
-      <p>
-        [{selected + 1}] {props.anecdotes[selected]}
-      </p>
-      <p>has {points[selected]} votes</p>
+      <AOfDay selected={selected} anecdotes={anecdotes} points={points} />
       <Button handleClick={handleVote} text="Vote" />
       <Button handleClick={handleNext} text="Next Anecdote!" />
-      <h2>Anecdote with the most votes:</h2>
-      <p>
-        [{parseInt(mostPoints) + 1}] {props.anecdotes[mostPoints]}
-      </p>
-      <p>has {points[mostPoints]} votes</p>
+      <AMostV mostPoints={mostPoints} points={points} anecdotes={anecdotes} />
     </div>
   );
 };
