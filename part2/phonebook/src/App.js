@@ -10,12 +10,16 @@ const App = () => {
     const personObj = {
       name: newName,
     };
-    setPersons(persons.concat(personObj));
-    setNewName("");
+
+    if (persons.find((person) => person.name === newName)) {
+      alert(`${newName} already exists in this phonebook!`);
+    } else {
+      setPersons(persons.concat(personObj));
+      setNewName("");
+    }
   };
 
   const handlePersonChange = (event) => {
-    console.log(event.target.value);
     setNewName(event.target.value);
   };
 
@@ -30,7 +34,6 @@ const App = () => {
         <div>
           name: <input value={newName} onChange={handlePersonChange} />
         </div>
-        <div>debug: {newName}</div>
         <div>
           <button type="submit">add</button>
         </div>
