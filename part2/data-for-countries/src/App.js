@@ -2,6 +2,54 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./App.css";
 
+const LocalWeather = (props) => {
+  const [weather, setWeather] = useState(null);
+
+  useEffect(() => {
+    const CancelToken = axios.CancelToken;
+    const source = CancelToken.source();
+    const dataHook = () => {
+      axios
+        .get(
+          `http://api.weatherstack.com/current?access_key=${process.env.REACT_APP_API_KEY}&&query=${props.city}`,
+          { cancelToken: source.token }
+        )
+        .then((response) => {
+          setWeather(response.data);
+        });
+    };
+    dataHook();
+    return () => {
+      source.cancel();
+    };
+  }, [props.city]);
+
+  return weather ? (
+    <div>
+      <h3>Weather in {props.city}:</h3>
+      <p>
+        <strong>Temp:</strong> {weather.current.temperature} Celsius
+      </p>
+      <img
+        src={weather.current.weather_icons[0]}
+        alt="weather for current country"
+      />
+      <p>
+        <strong>{weather.current.weather_descriptions[0]}</strong>
+      </p>
+      <p>
+        <strong>Wind speed:</strong> {weather.current.wind_speed} mph,{" "}
+        <strong>Direction: </strong> {weather.current.wind_dir}
+      </p>
+      <p>
+        <strong>Local Time is: </strong> {weather.location.localtime}
+      </p>
+    </div>
+  ) : (
+    ""
+  );
+};
+
 const SelectedCountry = (props) => {
   return props.filteredData.map((country) => (
     <div key={country.name}>
@@ -16,6 +64,7 @@ const SelectedCountry = (props) => {
         </ul>
       ))}
       <img src={props.filteredData[0].flag} alt="flag of filtered country" />
+      <LocalWeather city={country.capital} />
     </div>
   ));
 };
