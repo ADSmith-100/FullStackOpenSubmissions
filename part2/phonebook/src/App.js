@@ -17,6 +17,13 @@ const App = () => {
     });
   }, []);
 
+  const handleRemove = (id) => {
+    personService.remove(id).then(() => {
+      const newPeople = persons.filter((p) => p.id !== id);
+      setPersons(newPeople);
+    });
+  };
+
   const addPerson = (event) => {
     event.preventDefault();
     const personObj = {
@@ -72,7 +79,9 @@ const App = () => {
         />
       </div>
       <h2>Numbers</h2>
-      <PersonList filteredData={filteredData} />
+      <div>
+        <PersonList filteredData={filteredData} handleRemove={handleRemove} />
+      </div>
     </div>
   );
 };
