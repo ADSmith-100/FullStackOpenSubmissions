@@ -12,8 +12,8 @@ const App = () => {
   const [searchName, setNewSearchName] = useState("");
 
   useEffect(() => {
-    personService.getAll().then((response) => {
-      setPersons(response.data);
+    personService.getAll().then((initialPersons) => {
+      setPersons(initialPersons);
     });
   }, []);
 
@@ -27,8 +27,8 @@ const App = () => {
     if (persons.find((person) => person.name === newName)) {
       alert(`${newName} already exists in this phonebook!`);
     } else {
-      personService.create(personObj).then((response) => {
-        setPersons(persons.concat(response.data));
+      personService.create(personObj).then((returnedPerson) => {
+        setPersons(persons.concat(returnedPerson));
 
         setNewName("");
         setNewNum("");
