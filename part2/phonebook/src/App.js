@@ -28,15 +28,34 @@ const App = () => {
     }
   };
 
+  const updatePerson = (id) => {
+    const updatedPersonObj = {
+      name: newName,
+      number: newNum,
+    };
+    personService.update(id, updatedPersonObj).then((updatedPerson) => {
+      const updatedPList = [...persons];
+      updatedPList.splice(id - 1, 1, updatedPerson);
+      setPersons(updatedPList);
+      setNewName("");
+      setNewNum("");
+    });
+  };
+
   const addPerson = (event) => {
     event.preventDefault();
     const personObj = {
       name: newName,
       number: newNum,
     };
+    const personToUpdate = persons.filter((p) => p.name === newName);
 
     if (persons.find((person) => person.name === newName)) {
-      alert(`${newName} already exists in this phonebook!`);
+      window.confirm(
+        `${newName} already exists in this phonebook! Want to replace the number?`
+      )
+        ? updatePerson(personToUpdate[0].id, newName)
+        : alert("action cancelled");
     } else {
       personService.create(personObj).then((returnedPerson) => {
         setPersons(persons.concat(returnedPerson));
