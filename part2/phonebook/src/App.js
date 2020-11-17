@@ -17,11 +17,15 @@ const App = () => {
     });
   }, []);
 
-  const handleRemove = (id) => {
-    personService.remove(id).then(() => {
-      const newPeople = persons.filter((p) => p.id !== id);
-      setPersons(newPeople);
-    });
+  const handleRemove = (id, name) => {
+    if (window.confirm(`Are you sure you want to delete ${name}?`)) {
+      personService.remove(id).then(() => {
+        const newPeople = persons.filter((p) => p.id !== id);
+        setPersons(newPeople);
+      });
+    } else {
+      alert("operation cancelled");
+    }
   };
 
   const addPerson = (event) => {

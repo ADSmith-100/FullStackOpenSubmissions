@@ -10,7 +10,7 @@ const PersonList = (props) => {
           <Person person={person} />{" "}
           <button
             className="remove"
-            onClick={() => props.handleRemove(person.id)}
+            onClick={() => props.handleRemove(person.id, person.name)}
           >
             Remove
           </button>
