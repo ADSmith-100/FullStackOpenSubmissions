@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import personService from "./Services/Persons";
 import "./App.css";
 import AddForm from "./Components/AddForm";
 import Filter from "./Components/Filter";
@@ -12,9 +12,7 @@ const App = () => {
   const [searchName, setNewSearchName] = useState("");
 
   useEffect(() => {
-    console.log("effect");
-    axios.get("http://localhost:3001/persons").then((response) => {
-      console.log("promise fulfilled");
+    personService.getAll().then((response) => {
       setPersons(response.data);
     });
   }, []);
@@ -29,13 +27,12 @@ const App = () => {
     if (persons.find((person) => person.name === newName)) {
       alert(`${newName} already exists in this phonebook!`);
     } else {
-      axios
-        .post("http://localhost:3001/persons", personObj)
-        .then((response) => {
-          setPersons(persons.concat(response.data));
-          setNewName("");
-          setNewNum("");
-        });
+      personService.create(personObj).then((response) => {
+        setPersons(persons.concat(response.data));
+
+        setNewName("");
+        setNewNum("");
+      });
     }
   };
 
