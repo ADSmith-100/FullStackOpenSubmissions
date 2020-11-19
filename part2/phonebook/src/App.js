@@ -4,7 +4,8 @@ import "./App.css";
 import AddForm from "./Components/AddForm";
 import Filter from "./Components/Filter";
 import PersonList from "./Components/PersonList";
-import Notification from "./Components/Notification";
+import NotificationER from "./Components/NotificationER";
+import NotificationOK from "./Components/NotificationOK";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -12,6 +13,7 @@ const App = () => {
   const [newNum, setNewNum] = useState("");
   const [searchName, setNewSearchName] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
+  const [comfirmMessage, setComfirmMessage] = useState(null);
 
   useEffect(() => {
     personService.getAll().then((initialPersons) => {
@@ -21,10 +23,19 @@ const App = () => {
 
   const handleRemove = (id, name) => {
     if (window.confirm(`Are you sure you want to delete ${name}?`)) {
-      personService.remove(id).then(() => {
-        const newPeople = persons.filter((p) => p.id !== id);
-        setPersons(newPeople);
-      });
+      personService
+        .remove(id)
+        .then(() => {
+          const newPeople = persons.filter((p) => p.id !== id);
+          setPersons(newPeople);
+        })
+        .catch((error) => {
+          setErrorMessage(`'${name}' was already removed from server`);
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 5000);
+          setPersons(persons.filter((p) => p.id !== id));
+        });
     } else {
       alert("operation cancelled");
     }
@@ -40,9 +51,9 @@ const App = () => {
       updatedPList.splice(id - 1, 1, updatedPerson);
       setPersons(updatedPList);
 
-      setErrorMessage(`Number for ${newName} has been updated!`);
+      setComfirmMessage(`Number for ${newName} has been updated!`);
       setTimeout(() => {
-        setErrorMessage(null);
+        setComfirmMessage(null);
       }, 4000);
       setNewName("");
       setNewNum("");
@@ -66,9 +77,9 @@ const App = () => {
     } else {
       personService.create(personObj).then((returnedPerson) => {
         setPersons(persons.concat(returnedPerson));
-        setErrorMessage(`${newName} has been added to the phonebook!`);
+        setComfirmMessage(`${newName} has been added to the phonebook!`);
         setTimeout(() => {
-          setErrorMessage(null);
+          setComfirmMessage(null);
         }, 4000);
         setNewName("");
         setNewNum("");
@@ -101,7 +112,12 @@ const App = () => {
           searchName={searchName}
         />
       </div>
-      <Notification message={errorMessage} />
+      <br></br>
+      {errorMessage !== null ? (
+        <NotificationER message={errorMessage} />
+      ) : (
+        <NotificationOK message={comfirmMessage} />
+      )}
       <br></br>
       <div>
         <AddForm
