@@ -4,12 +4,14 @@ import "./App.css";
 import AddForm from "./Components/AddForm";
 import Filter from "./Components/Filter";
 import PersonList from "./Components/PersonList";
+import Notification from "./Components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNum, setNewNum] = useState("");
   const [searchName, setNewSearchName] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     personService.getAll().then((initialPersons) => {
@@ -37,6 +39,11 @@ const App = () => {
       const updatedPList = [...persons];
       updatedPList.splice(id - 1, 1, updatedPerson);
       setPersons(updatedPList);
+
+      setErrorMessage(`Number for ${newName} has been updated!`);
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 4000);
       setNewName("");
       setNewNum("");
     });
@@ -59,7 +66,10 @@ const App = () => {
     } else {
       personService.create(personObj).then((returnedPerson) => {
         setPersons(persons.concat(returnedPerson));
-
+        setErrorMessage(`${newName} has been added to the phonebook!`);
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 4000);
         setNewName("");
         setNewNum("");
       });
@@ -91,6 +101,7 @@ const App = () => {
           searchName={searchName}
         />
       </div>
+      <Notification message={errorMessage} />
       <br></br>
       <div>
         <AddForm
